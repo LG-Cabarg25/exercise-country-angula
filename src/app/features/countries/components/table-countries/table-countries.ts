@@ -55,6 +55,7 @@ import { CountryStore } from '../../state/countryStore';
       <p-table
         #dt
         [value]="countries"
+        [(selection)]="selectedCountry"
         [paginator]="true"
         [rows]="10"
         [rowsPerPageOptions]="[10, 25, 50]"
@@ -84,8 +85,8 @@ import { CountryStore } from '../../state/countryStore';
 
         <ng-template pTemplate="body" let-country>
           <tr
-            [pSelectableRow]="country"
             class="hover:bg-[#aaa221] cursor-pointer"
+            (click)="onRowClick(country)"
           >
             <td class="py-2">{{ country.name.common }}</td>
             <td class="py-2">{{ country.capital?.[0] }}</td>
@@ -115,6 +116,8 @@ import { CountryStore } from '../../state/countryStore';
 export class TableCountriesComponent {
   @Input() countries: Country[] = [];
 
+  selectedCountry: Country | null = null;
+
   private store = inject(CountryStore);
 
   constructor(private router: Router) {}
@@ -134,6 +137,7 @@ export class TableCountriesComponent {
 
   onRowClick(country?: Country | Country[]) {
     if (!country || Array.isArray(country)) return;
-    this.router.navigate(['/countries', country.cca3]);
+    console.log('Navegando a:', country.cca3);
+    this.router.navigate(['/details', country.cca3]);
   }
 }

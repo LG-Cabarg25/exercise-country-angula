@@ -13,11 +13,11 @@ import { SpinnerLoadComponent } from '../../../../shared/components/spinnerLoad/
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
-      class="min-h-screen bg-gradient-to-b from-blue-800 via-blue-700 to-blue-600 text-white flex flex-col items-center px-4 py-10 mb-12"
+      class="min-h-screen bg-gradient-to-r from-blue-900 via-indigo-800 to-purple-900 text-yellow-400 flex flex-col items-center px-4 py-10 mb-12"
     >
       <br />
       <h1 class="text-3xl md:text-4xl font-bold mt-24 mb-8 text-center">
-        🌍 Lista de países del mundo
+        Listado de países
       </h1>
 
       <div class="w-full max-w-7xl">

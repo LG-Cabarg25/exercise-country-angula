@@ -11,9 +11,9 @@ export const routes: Routes = [
   {
     path: 'details/:code',
     loadComponent: () =>
-      import(
-        './features/countries/pages/details-country/details-country.component'
-      ).then((m) => m.DetailsCountryComponent),
+      import('./features/countries/pages/details-country/details-country').then(
+        (m) => m.DetailsCountryComponent
+      ),
   },
   {
     path: '**',

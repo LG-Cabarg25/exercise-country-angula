@@ -3,3 +3,8 @@ body {
   background-color: #f3f4f6; /* Tailwind's gray-100 */
   color: #1f2937; /* Tailwind's gray-800 */
 }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}

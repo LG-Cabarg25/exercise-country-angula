@@ -104,4 +104,18 @@ export class CountryService {
       })
     );
   }
+  getCountryByCode(code: string) {
+    return this.http.get<Country[]>(`${this.apiUrl}alpha/${code}`).pipe(
+      takeUntilDestroyed(this.destroyRef),
+      tap((res) => {
+        if (!res || res.length === 0) {
+          console.warn(`No se encontró país con código ${code}`);
+        }
+      }),
+      catchError((error) => {
+        console.error('Error al obtener país por código', error);
+        return of([]);
+      })
+    );
+  }
 }
