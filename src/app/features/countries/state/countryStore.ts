@@ -1,14 +1,18 @@
-import { inject, signal, computed, Injectable, effect } from '@angular/core';
+import { inject, signal, computed, Injectable, effect, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { CountryService } from '../../../core/services/country.service';
 import { Country } from '../../../core/models/countryModel';
 import { of } from 'rxjs';
-import { firstValueFrom } from 'rxjs';
+
+const STORAGE_KEY = 'countryAppState';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CountryStore {
   private countryService = inject(CountryService);
+  private platformId = inject(PLATFORM_ID);
+  private isBrowser = isPlatformBrowser(this.platformId);
 
   private nameFilter = signal('');
   private regionFilter = signal('');
@@ -19,7 +23,25 @@ export class CountryStore {
   private countriesSignal = this.countryService.countriesSignal;
 
   constructor() {
-    // Este efecto reacciona a los cambios en el código seleccionado
+    if (this.isBrowser) {
+      const savedState = localStorage.getItem(STORAGE_KEY);
+      if (savedState) {
+        const state = JSON.parse(savedState);
+        this.nameFilter.set(state.nameFilter || '');
+        this.regionFilter.set(state.regionFilter || '');
+        this.selectedCountryCode.set(state.selectedCountryCode || null);
+      }
+
+      effect(() => {
+        const state = {
+          nameFilter: this.nameFilter(),
+          regionFilter: this.regionFilter(),
+          selectedCountryCode: this.selectedCountryCode()
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      });
+    }
+
     effect(() => {
       const code = this.selectedCountryCode();
       if (!code) {
@@ -38,20 +60,19 @@ export class CountryStore {
     const name = this.nameFilter().toLowerCase();
     const region = this.regionFilter().toLowerCase();
 
-    return countries.filter((country) => {
-      const matchesName = country.name.common.toLowerCase().includes(name);
+    return countries?.filter((country: Country) => {
+      const matchesName = country?.name?.common?.toLowerCase().includes(name) ?? false;
       const matchesRegion = region
-        ? country.region.toLowerCase() === region
+        ? country?.region?.toLowerCase() === region
         : true;
       return matchesName && matchesRegion;
-    });
+    }) ?? [];
   });
 
   readonly isLoading = computed(() => this.loading());
 
   readonly selectedCountrySignal = computed(() => this.selectedCountry());
 
-  // --- Métodos ---
   async loadCountries(): Promise<void> {
     this.loading.set(true);
     const start = Date.now();

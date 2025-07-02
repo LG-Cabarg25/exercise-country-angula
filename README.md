@@ -2,6 +2,14 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.4.
 
+## Context
+
+### English
+The application is a country information viewer that uses the Rest Countries API as its data source. Due to issues with the `/all` endpoint, the application defaults to fetching data for the Americas region using the `/region/americas` endpoint.
+
+### Español
+La aplicación es un visor de información de países que utiliza la API Rest Countries como fuente de datos. Debido a problemas con el endpoint `/all`, la aplicación por defecto obtiene datos de la región de las Américas usando el endpoint `/region/americas`.
+
 ## Development server
 
 To start a local development server, run:
